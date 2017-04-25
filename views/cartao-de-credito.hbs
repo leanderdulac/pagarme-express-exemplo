@@ -26,6 +26,12 @@
                     <input name="card_cvv" value="111" placeholder="CVV" type="number">
                 </div>
             </div>
+            <div class="field">
+                <div class="ui checkbox">
+                    <input type="checkbox" tabindex="0" class="hidden" name="capture">
+                    <label style="color:#ffffff!important">Capturar a transação?</label>
+                </div>
+            </div>
             <div class="ui divider"></div>
             <div class="field">
                 <label>Valor da Transação</label>
@@ -39,3 +45,18 @@
         </form>
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+        $('.ui.checkbox').checkbox({
+            onChecked: function () {
+                console.log($('.ui.checkbox input').last().val())
+                $('.ui.checkbox input').last().val(true)
+            },
+            onUnchecked: function () {
+                $('.ui.checkbox input').last().val(false)
+            }
+        })
+    })
+</script>

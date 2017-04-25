@@ -14,7 +14,6 @@ router.get('/', function (req, res, next) {
 // Os POSTs nessa URL vão criar uma transação no ambiente de testes
 router.post('/', function (req, res, next) {
     var form_data = req.body;
-    /*console.log(form_data)*/
 
     // Cria uma conexão com o Pagar.me 
     pagarme.client.connect({
@@ -22,11 +21,11 @@ router.post('/', function (req, res, next) {
         })
         // Usa a conexão com o Pagar.me para criar uma transação
         .then(client => client.transactions.create({
-            "api_key": config.api_key,
             "card_number": form_data.card_number,
             "card_cvv": form_data.card_cvv,
             "card_holder_name": form_data.card_holder_name,
             "card_expiration_date": form_data.card_expiration_date,
+            "capture": form_data.capture,
             "customer": {
                 "email": "aardvark.silva@gmail.com",
                 "name": form_data.card_holder_name,
@@ -42,7 +41,6 @@ router.post('/', function (req, res, next) {
                     "ddd": "11"
                 }
             },
-            "capture": true,
             "async": false,
             "installments": form_data.installments,
             "payment_method": "credit_card",

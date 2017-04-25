@@ -40,6 +40,7 @@ router.post('/', function (req, res, next) {
             "async": false,
             "installments": 1,
             "payment_method": "boleto",
+            "boleto_instructions": "Use esse atributo para preencher o Campo instruções do boleto.",
             "amount": form_data.amount * 1
         }))
         // Vamos fazer o render de uma página com o JSON retornado pela API 
