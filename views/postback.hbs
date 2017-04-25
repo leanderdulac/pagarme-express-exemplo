@@ -1,0 +1,41 @@
+<div class="ui vertical segment">
+    <div class="ui container">
+        <h1 class="ui header">Transações com Cartão de Crédito - POSTback</h1>
+        <p><a href="/">&larr; Voltar</a></p>
+    </div>
+</div>
+
+<div class="ui text container">
+    <div class="ui basic inverted segment">
+        <form class="ui big inverted form" method="POST" action="">
+            <div class="field">
+                <label>Nome no Cartão</label>
+                <input name="card_holder_name" value="Aardvark da Silva" placeholder="Nome do Cartão" type="text">
+            </div>
+            <div class="field">
+                <label>Número do Cartão</label>
+                <input name="card_number" value="4556366941062122" placeholder="Número do Cartão" type="number">
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <label>Data Vencimento</label>
+                    <input name="card_expiration_date" value="1220" placeholder="Data Vencimento" type="number">
+                </div>
+                <div class="field">
+                    <label>CVV</label>
+                    <input name="card_cvv" value="111" placeholder="CVV" type="number">
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="field">
+                <label>Valor da Transação</label>
+                <input name="amount" value="888" placeholder="Valor da Transação" type="number">
+            </div>
+            <div class="field">
+                <label>Número de Parcelas</label>
+                <input name="installments" value="1" placeholder="Número de Parcelas" type="number">
+            </div>
+            <button submit class="ui submit orange huge fluid button">Criar Transação</button>
+        </form>
+    </div>
+</div>
