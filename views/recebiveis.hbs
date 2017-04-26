@@ -1,0 +1,38 @@
+<div class="ui vertical segment">
+    <div class="ui container">
+        <h1 class="ui header">Recebíveis</h1>
+        <p><a href="/">&larr; Voltar</a></p>
+    </div>
+</div>
+
+<div class="ui basic segment">
+    <div class="ui container">    
+        <table class="ui striped table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th>Valor</th>
+                    <th>Parcela</th>
+                    <th>Meio Pgto</th>
+                    <th class="center aligned">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each payables}}
+                <tr>
+                    <td>{{payment_date}}</td>
+                    <td>{{status}}</td>
+                    <td>{{amount}}</td>
+                    <td>{{installment}}</td>
+                    <td>{{payment_method}}</td>
+                    <td class="center aligned">
+                        <a href="#" class="ui mini orange button">Antecipar</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+

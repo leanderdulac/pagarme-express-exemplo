@@ -19,11 +19,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/index'));
+
 app.use('/transacoes/cartao-de-credito', require('./routes/cartao-de-credito'));
 app.use('/transacoes/postback', require('./routes/postback'));
 app.use('/transacoes/one-click-buy', require('./routes/one-click-buy'));
 app.use('/transacoes/checkout', require('./routes/checkout'));
 app.use('/transacoes/boleto', require('./routes/boleto'));
+
+app.use('/recebiveis', require('./routes/recebiveis'));
+app.use('/assinaturas', require('./routes/assinaturas'));
+
 /*app.use('/users', users);*/
 
 // catch 404 and forward to error handler
