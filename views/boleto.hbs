@@ -16,3 +16,19 @@
         </form>
     </div>
 </div>
+
+<div class="ui divider"></div>
+
+<div class="ui text container">
+    <h2 class="ui header">Pagar Boleto</h2>
+    <div class="ui basic inverted segment">
+        <form class="ui big inverted form" method="POST" action="/transacoes/boleto/pagar">
+            <div class="field">
+                <label>ID da Transação</label>
+                <input name="transaction_id" value="" placeholder="ID da Transação" type="text">
+            </div>
+            <button submit class="ui submit orange huge fluid button">Pagar Boleto</button>
+        </form>
+    </div>
+</div>
+

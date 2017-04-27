@@ -52,6 +52,29 @@ router.get('/balance/:id', function (req, res, next) {
         }));
 });
 
+router.get('/operations/:id', function (req, res, next) {
+    // Cria uma conexão com o Pagar.me 
+    pagarme.client.connect({
+            api_key: config.api_key
+        })
+        // Usa a conexão com o Pagar.me para criar uma transação
+        .then(client => client.balanceOperations.find({
+            recipientId: req.params.id
+        }))
+        // Vamos fazer o render de uma página com o JSON retornado pela API 
+        .then(local_recipients => {
+            res.send(local_recipients)
+        })
+        // Se houve algum erro, vamos enviar o resultado do erro
+        .catch(error => res.render('resultado', {
+            back_url: '/recipients/',
+            json_result: JSONFormatter(error, {
+                type: 'space',
+                size: 2
+            })
+        }));
+});
+
 
 router.post('/', function (req, res, next) {
     if(!recipients) return;

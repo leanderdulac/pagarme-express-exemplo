@@ -33,6 +33,7 @@
                     
                     <td class="center aligned">
                         <a href="#" id="balance-{{id}}" class="ui mini orange balance button">Saldo</a>
+                        <a href="#" id="operations-{{id}}" class="ui mini orange operations button">Extrato</a>
                     </td>
                 </tr>
                 {{/each}}
@@ -102,6 +103,25 @@
         </table>
     </div>
 </div>
+<div class="ui operations modal">
+    <div class="header">Extrato</div>
+    <div class="content">
+        <table class="ui striped table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Valor</th>
+                    <th>Taxa</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <script>
     $(document).ready(function () {
@@ -111,12 +131,22 @@
         $('.balance.button').on('click', function () {
             var self = this;
             $(self).addClass('loading')
-            $.get('balance/'+$(this).attr('id').replace('balance-', ''), function(data) {
+            $.get('/recipients/balance/'+$(this).attr('id').replace('balance-', ''), function(data) {
                 console.log(data)
                 $('#balance-modal-available').text(data.available.amount)
                 $('#balance-modal-waiting_funds').text(data.waiting_funds.amount)
                 $('#balance-modal-transferred').text(data.transferred.amount)
                 $('.ui.balance.modal').modal('show');
+                $(self).removeClass('loading')
+            }); 
+        });
+        $('.operations.button').on('click', function () {
+            var self = this;
+            $(self).addClass('loading')
+            $.get('/recipients/operations/'+$(this).attr('id').replace('operations-', ''), function(data) {
+                console.log(data)
+                
+                $('.ui.operations.modal').modal('show');
                 $(self).removeClass('loading')
             }); 
         });

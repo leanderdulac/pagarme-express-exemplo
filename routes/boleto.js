@@ -60,4 +60,36 @@ router.post('/', function (req, res, next) {
         }))
 });
 
+
+// Os POSTs nessa URL vão pagar um boleto no ambiente de testes
+router.post('/pagar', function (req, res, next) {
+    var form_data = req.body;
+    console.log(form_data)
+    // Cria uma conexão com o Pagar.me 
+    pagarme.client.connect({
+            api_key: config.api_key
+        })
+        // Usa a conexão com o Pagar.me para criar uma transação
+        .then(client => client.transactions.update({
+            "id": form_data.transaction_id,
+            "status": "paid"
+        }))
+        // Vamos fazer o render de uma página com o JSON retornado pela API 
+        .then(transactions => res.render('resultado', {
+            back_url: '/transacoes/boleto',
+            json_result: JSONFormatter(transactions, {
+                type: 'space',
+                size: 2
+            })
+        }))
+        // Se houve algum erro, vamos enviar o resultado do erro
+        .catch(error => res.render('resultado', {
+            back_url: '/transacoes/boleto',
+            json_result: JSONFormatter(error, {
+                type: 'space',
+                size: 2
+            })
+        }))
+});
+
 module.exports = router;
