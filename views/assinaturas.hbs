@@ -1,7 +1,12 @@
 <div class="ui vertical segment">
-    <div class="ui container">
-        <h1 class="ui header">Assinaturas</h1>
-        <p><a href="/">&larr; Voltar</a></p>
+    <div class="ui grid container ">
+        <div class="eight wide column">
+            <h1 class="ui header">Assinaturas</h1>
+            <p><a href="/">&larr; Voltar</a></p>
+        </div>
+        <div class="eight wide column">
+            <a href="javascript:void(0)" id="nova-assinatura" class="ui right floated orange large button">Nova Assinatura</a>
+        </div>
     </div>
 </div>
 
@@ -10,25 +15,25 @@
         <table class="ui striped table">
             <thead>
                 <tr>
-                    <th>Nome</th>
+                    <th>ID Assinatura</th>
+                    <th>ID Plano</th>
+                    <th>Nome do Plano</th>
                     <th>Status</th>
-                    <th>Valor</th>
-                    <th>Parcela</th>
                     <th>Meio Pgto</th>
-                    <th class="center aligned">Ações</th>
+                    {{!--<th class="center aligned">Ações</th>--}}
                 </tr>
             </thead>
             <tbody>
                 {{#each subscriptions}}
                 <tr>
+                    <td>{{id}}</td>
+                    <td>{{plan.id}}</td>
                     <td>{{plan.name}}</td>
                     <td>{{status}}</td>
-                    <td>{{amount}}</td>
-                    <td>{{installment}}</td>
                     <td>{{payment_method}}</td>
-                    <td class="center aligned">
+                    {{!--<td class="center aligned">
                         <a href="#" class="ui mini orange button">Antecipar</a>
-                    </td>
+                    </td>--}}
                 </tr>
                 {{/each}}
             </tbody>
@@ -36,3 +41,37 @@
     </div>
 </div>
 
+<div class="ui modal">
+  <div class="header">Criar uma Nova Assinatura</div>
+  <div class="content">
+    <form action="" method="POST" class="ui large form">
+        <div class="field">
+            <label>Nome no Cartão</label>
+            <input name="card_holder_name" value="Aardvark da Silva" placeholder="Nome do Cartão" type="text">
+        </div>
+        <div class="field">
+            <label>Número do Cartão</label>
+            <input name="card_number" value="4556366941062122" placeholder="Número do Cartão" type="number">
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>Data Vencimento</label>
+                <input name="card_expiration_date" value="1220" placeholder="Data Vencimento" type="number">
+            </div>
+            <div class="field">
+                <label>CVV</label>
+                <input name="card_cvv" value="111" placeholder="CVV" type="number">
+            </div>
+        </div>
+        <button submit class="ui submit orange huge fluid button">Criar Assinatura</button>
+    </form>
+  </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('#nova-assinatura').on('click', function() {
+            $('.ui.modal').modal('show');
+        })
+    })
+</script>

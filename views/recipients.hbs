@@ -1,0 +1,124 @@
+<div class="ui vertical segment">
+    <div class="ui grid container ">
+        <div class="eight wide column">
+            <h1 class="ui header">Recebedores</h1>
+            <p><a href="/">&larr; Voltar</a></p>
+        </div>
+        <div class="eight wide column">
+            <a href="javascript:void(0)" id="nova-assinatura" class="ui right floated orange large button">Nova Transação</a>
+        </div>
+    </div>
+</div>
+
+<div class="ui basic segment">
+    <div class="ui container">
+        <table class="ui striped table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Antecip. Auto</th>
+                    <th>Vol Antecipável</th>
+                    <th>Transf</th>
+                    
+                    <th class="center aligned">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each recipients}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{automatic_anticipation_enabled}}</td>
+                    <td>{{anticipatable_volume_percentage}}</td>
+                    <td>{{transfer_enabled}}</td>
+                    
+                    <td class="center aligned">
+                        <a href="#" id="balance-{{id}}" class="ui mini orange balance button">Saldo</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="ui transaction modal">
+    <div class="header">Criar uma Nova Transação</div>
+    <div class="content">
+        <form action="" method="POST" class="ui large form">
+            <div class="field">
+                <label>Nome no Cartão</label>
+                <input name="card_holder_name" value="Aardvark da Silva" placeholder="Nome do Cartão" type="text">
+            </div>
+            <div class="field">
+                <label>Número do Cartão</label>
+                <input name="card_number" value="4556366941062122" placeholder="Número do Cartão" type="number">
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <label>Data Vencimento</label>
+                    <input name="card_expiration_date" value="1220" placeholder="Data Vencimento" type="number">
+                </div>
+                <div class="field">
+                    <label>CVV</label>
+                    <input name="card_cvv" value="111" placeholder="CVV" type="number">
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="field">
+                <label>Valor da Transação</label>
+                <input name="amount" value="100000" placeholder="Valor da Transação" type="number">
+            </div>
+            <div class="field">
+                <label>Número de Parcelas</label>
+                <input name="installments" value="1" placeholder="Número de Parcelas" type="number">
+            </div>
+            <div class="ui divider"></div>
+            <div class="field">
+                Essa Transação vai ser dividida entre dois Recebedores, um vai receber 30% e outro 70% do valor da Transação.
+            </div>
+            <button submit class="ui submit orange huge fluid button">Criar Transação</button>
+        </form>
+    </div>
+</div>
+
+<div class="ui balance modal">
+    <div class="header">Saldos</div>
+    <div class="content">
+        <table class="ui striped basic table">
+            <tbody>
+                <tr>
+                    <td>Disponível</td>
+                    <td id="balance-modal-available"></td>
+                </tr>
+                <tr>
+                    <td>Aguardando Pagamento</td>
+                    <td id="balance-modal-waiting_funds"></td>
+                </tr>
+                <tr>
+                    <td>Saldo Atual</td>
+                    <td id="balance-modal-transferred"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#nova-assinatura').on('click', function () {
+            $('.ui.transaction.modal').modal('show');
+        });
+        $('.balance.button').on('click', function () {
+            var self = this;
+            $(self).addClass('loading')
+            $.get('balance/'+$(this).attr('id').replace('balance-', ''), function(data) {
+                console.log(data)
+                $('#balance-modal-available').text(data.available.amount)
+                $('#balance-modal-waiting_funds').text(data.waiting_funds.amount)
+                $('#balance-modal-transferred').text(data.transferred.amount)
+                $('.ui.balance.modal').modal('show');
+                $(self).removeClass('loading')
+            }); 
+        });
+    })
+</script>

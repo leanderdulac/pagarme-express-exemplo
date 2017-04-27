@@ -1,7 +1,12 @@
 <div class="ui vertical segment">
-    <div class="ui container">
-        <h1 class="ui header">Recebíveis</h1>
-        <p><a href="/">&larr; Voltar</a></p>
+    <div class="ui grid container ">
+        <div class="eight wide column">
+            <h1 class="ui header">Recebíveis</h1>
+            <p><a href="/">&larr; Voltar</a></p>
+        </div>
+        <div class="eight wide column">
+            <a href="javascript:void(0)" id="antecipar" class="ui right floated orange large button">Antecipar Recebíveis</a>
+        </div>
     </div>
 </div>
 
@@ -15,7 +20,7 @@
                     <th>Valor</th>
                     <th>Parcela</th>
                     <th>Meio Pgto</th>
-                    <th class="center aligned">Ações</th>
+                    {{!--<th class="center aligned">Ações</th>--}}
                 </tr>
             </thead>
             <tbody>
@@ -26,9 +31,9 @@
                     <td>{{amount}}</td>
                     <td>{{installment}}</td>
                     <td>{{payment_method}}</td>
-                    <td class="center aligned">
+                    {{!--<td class="center aligned">
                         <a href="#" class="ui mini orange button">Antecipar</a>
-                    </td>
+                    </td>--}}
                 </tr>
                 {{/each}}
             </tbody>
@@ -36,3 +41,33 @@
     </div>
 </div>
 
+
+<div class="ui modal">
+  <div class="header">Antecipar Recebíveis</div>
+  <div class="content">
+    <form action="" method="POST" class="ui large form">
+        <div class="field">
+            <label>Valor para Antecipar</label>
+            <input name="requested_amount" value="2000000" placeholder="Valor da Transação" type="number">
+        </div>
+       {{!-- <div class="field">
+            <label>Data de Pagamento</label>
+            <input name="payment_date" value="" placeholder="Valor da Transação" type="date">
+        </div>--}}
+        <div class="field">
+            <label>Timeframe da Antecipação</label>
+            <input name="timeframe" value="end" placeholder="Timeframe da Antecipação" type="text">
+            <p>Pode ser <b>start</b> ou <b>end</b></p>
+        </div>
+        <button submit class="ui submit orange huge fluid button">Antecipar</button>
+    </form>
+  </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('#antecipar').on('click', function() {
+            $('.ui.modal').modal('show');
+        });
+    });
+</script>

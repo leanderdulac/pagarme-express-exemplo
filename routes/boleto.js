@@ -20,7 +20,6 @@ router.post('/', function (req, res, next) {
         })
         // Usa a conexão com o Pagar.me para criar uma transação
         .then(client => client.transactions.create({
-            "api_key": config.api_key,
             "card_holder_name": form_data.card_holder_name,
             "customer": {
                 "email": "aardvark.silva@gmail.com",

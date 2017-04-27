@@ -12,6 +12,8 @@
     "express": "~4.15.2",
     "hbs": "~4.0.1",
     "json-format": "^1.0.1",
+    "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
     "morgan": "~1.8.1",
     "pagarme": "^3.0.2",
     "semantic-ui": "^2.2.10",
