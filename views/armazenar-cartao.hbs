@@ -1,0 +1,78 @@
+<div class="ui vertical segment">
+    <div class="ui container">
+        <h1 class="ui header">Armazenar Cartão de Crédito</h1>
+        <p><a href="/">&larr; Voltar</a></p>
+    </div>
+</div>
+
+<div class="ui text container">
+    <div class="ui basic inverted segment">
+        <div class="ui big inverted form">
+            <div class="field">
+                <label>Nome no Cartão</label>
+                <input id="card_holder_name" value="Aardvark da Silva" placeholder="Nome do Cartão" type="text">
+            </div>
+            <div class="field">
+                <label>Número do Cartão</label>
+                <input id="card_number" value="4556366941062122" placeholder="Número do Cartão" type="number">
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <label>Data Vencimento</label>
+                    <input id="card_expiration_date" value="1220" placeholder="Data Vencimento" type="number">
+                </div>
+                <div class="field">
+                    <label>CVV</label>
+                    <input id="card_cvv" value="111" placeholder="CVV" type="number">
+                </div>
+            </div>
+            <button id="armazenar-cartao" class="ui orange huge fluid button">Armazenar Cartão</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $('#armazenar-cartao').on('click', function () {
+            $('.form').addClass('loading');
+            PagarMe.encryption_key = "ek_test_3nWQBVzj9M6k0UIunCdqh0ctv8lXIr";
+
+            var creditCard = new PagarMe.creditCard();
+            creditCard.cardHolderName = $("#card_holder_name").val();
+            creditCard.cardExpirationMonth = $("#card_expiration_date").val().slice(0, 2);
+            creditCard.cardExpirationYear = $("#card_expiration_date").val().slice(2, 4);
+            creditCard.cardNumber = $("#card_number").val();
+            creditCard.cardCVV = $("#card_cvv").val();
+
+            // pega os erros de validação nos campos do form
+            var fieldErrors = creditCard.fieldErrors();
+
+            //Verifica se há erros
+            var hasErrors = false;
+            for (var field in fieldErrors) {
+                hasErrors = true;
+                break;
+            }
+
+            if (hasErrors) {
+                // realiza o tratamento de errors
+                alert(fieldErrors);
+                $('.form').removeClass('loading');
+            } else {
+                // se não há erros, gera o card_hash...
+                creditCard.generateHash(function (cardHash) {
+                    console.log(cardHash)
+                    $.post(window.location.href, {
+                        card_hash: cardHash
+                    }, function (card) {
+                        localStorage.setItem('card_id', card.id);
+                        console.log(card)
+                        $('.form').removeClass('loading');
+                    })
+                });
+            }
+        });
+    });
+</script>

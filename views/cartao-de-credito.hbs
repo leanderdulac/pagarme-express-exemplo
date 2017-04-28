@@ -7,42 +7,31 @@
 
 <div class="ui text container">
     <div class="ui basic inverted segment">
-        <form class="ui big inverted form" method="POST" action="">
-            <div class="field">
-                <label>Nome no Cartão</label>
-                <input name="card_holder_name" value="Aardvark da Silva" placeholder="Nome do Cartão" type="text">
-            </div>
-            <div class="field">
-                <label>Número do Cartão</label>
-                <input name="card_number" value="4556366941062122" placeholder="Número do Cartão" type="number">
+        <div class="ui big inverted form">
+            <div class="two fields">
+                <div class="field">
+                    <label>CVV</label>
+                    <input id="card_cvv" value="111" placeholder="CVV" type="number">
+                </div>
+                <div class="field">
+                    <label>Número de Parcelas</label>
+                    <input id="installments" value="1" placeholder="Número de Parcelas" type="number">
+                </div>
             </div>
             <div class="two fields">
                 <div class="field">
-                    <label>Data Vencimento</label>
-                    <input name="card_expiration_date" value="1220" placeholder="Data Vencimento" type="number">
+                    <label>Valor da Transação</label>
+                    <input id="amount" value="888" placeholder="Valor da Transação" type="number">
                 </div>
                 <div class="field">
-                    <label>CVV</label>
-                    <input name="card_cvv" value="111" placeholder="CVV" type="number">
+                    <div class="ui checkbox">
+                        <input type="checkbox" tabindex="0" class="hidden" id="capture">
+                        <label style="color:#ffffff!important">Capturar a transação?</label>
+                    </div>
                 </div>
             </div>
-            <div class="field">
-                <div class="ui checkbox">
-                    <input type="checkbox" tabindex="0" class="hidden" name="capture">
-                    <label style="color:#ffffff!important">Capturar a transação?</label>
-                </div>
-            </div>
-            <div class="ui divider"></div>
-            <div class="field">
-                <label>Valor da Transação</label>
-                <input name="amount" value="888" placeholder="Valor da Transação" type="number">
-            </div>
-            <div class="field">
-                <label>Número de Parcelas</label>
-                <input name="installments" value="1" placeholder="Número de Parcelas" type="number">
-            </div>
-            <button submit class="ui submit orange huge fluid button">Criar Transação</button>
-        </form>
+            <button id="criar-transacao" class="ui orange huge fluid button">Criar Transação</button>
+        </div>
     </div>
 </div>
 
@@ -57,6 +46,23 @@
             onUnchecked: function () {
                 $('.ui.checkbox input').last().val(false)
             }
+        });
+
+        $('#criar-transacao').on('click', function() {
+            $('.form').addClass('loading');
+            // Primeiro vamos armazenar o cartão
+            var transaction = {
+                'card_id': localStorage.getItem('card_id'),
+                'card_cvv': $('#card_cvv').val(),
+                'capture': $('#capture').val(),
+                'amount': $('#amount').val(),
+                'installments': $('#installments').val()
+            };
+            $.post(window.location.href, transaction, function(data) {
+                $('.form').removeClass('loading');
+                console.log(data)
+            })
+
         })
     })
 </script>

@@ -23,13 +23,11 @@ router.post('/', function (req, res, next) {
         // Usa a conexão com o Pagar.me para criar uma transação
         .then(client => client.transactions.create({
             "api_key": config.api_key,
-            "card_number": form_data.card_number,
+            "card_id": form_data.card_id,
             "card_cvv": form_data.card_cvv,
-            "card_holder_name": form_data.card_holder_name,
-            "card_expiration_date": form_data.card_expiration_date,
             "customer": {
                 "email": "aardvark.silva@gmail.com",
-                "name": form_data.card_holder_name,
+                "name": "Aardvark da Silva",
                 "document_number": "18152564000105",
                 "address": {
                     "zipcode": "04571020",
@@ -48,17 +46,11 @@ router.post('/', function (req, res, next) {
             "installments": form_data.installments,
             "payment_method": "credit_card",
             "amount": form_data.amount * 1,
-            // Passando a URL que vai receber o resultado. Para conferir, entre em: http://requestb.in/1ibkvx41?inspect
-            "postback_url": "http://requestb.in/1ibkvx41"
+            // Passando a URL que vai receber o resultado
+            "postback_url": form_data.postback_url
         }))
         // Vamos fazer o render de uma página com o JSON retornado pela API 
-        .then(transactions => res.render('resultado', {
-            back_url: '/transacoes/postback',
-            json_result: JSONFormatter(transactions, {
-                type: 'space',
-                size: 2
-            })
-        }))
+        .then(transactions => res.send(transactions))
         // Se houve algum erro, vamos enviar o resultado do erro
         .catch(error => res.render('resultado', {
             back_url: '/transacoes/postback',

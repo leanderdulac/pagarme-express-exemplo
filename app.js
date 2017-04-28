@@ -26,6 +26,7 @@ app.use('/transacoes/one-click-buy', require('./routes/one-click-buy'));
 app.use('/transacoes/checkout', require('./routes/checkout'));
 app.use('/transacoes/boleto', require('./routes/boleto'));
 
+app.use('/armazenar-cartao-de-credito', require('./routes/armazenar-cartao-de-credito'));
 app.use('/recebiveis', require('./routes/recebiveis'));
 app.use('/assinaturas', require('./routes/assinaturas'));
 app.use('/recipients', require('./routes/recipients'));

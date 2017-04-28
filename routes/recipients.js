@@ -1,7 +1,7 @@
 var pagarme = require('pagarme');
+var config = require(__dirname + '/../config.json');
 var express = require('express');
 var JSONFormatter = require('json-format');
-var config = require(__dirname + '/../config.json');
 var router = express.Router();
 var recipients; 
 
