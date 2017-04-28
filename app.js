@@ -29,6 +29,7 @@ app.use('/transacoes/boleto', require('./routes/boleto'));
 app.use('/recebiveis', require('./routes/recebiveis'));
 app.use('/assinaturas', require('./routes/assinaturas'));
 app.use('/recipients', require('./routes/recipients'));
+app.use('/refund', require('./routes/refund'));
 
 /*app.use('/users', users);*/
 

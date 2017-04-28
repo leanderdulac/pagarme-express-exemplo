@@ -1,7 +1,7 @@
 <div class="ui vertical segment">
     <div class="ui grid container ">
         <div class="six wide column">
-            <h1 class="ui header">Recebedores</h1>
+            <h1 class="ui header">Transações</h1>
             <p><a href="/">&larr; Voltar</a></p>
         </div>
         <div class="ten wide column">
@@ -16,24 +16,26 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Antecip. Auto</th>
-                    <th>Vol Antecipável</th>
-                    <th>Transf</th>
+                    <th>Status</th>
+                    <th>Valor</th>
+                    <th>Estornado</th>
+                    <th>Método Pgto</th>
                     
                     <th class="center aligned">Ações</th>
                 </tr>
             </thead>
             <tbody>
-                {{#each recipients}}
+                {{#each transactions}}
                 <tr>
-                    <td>{{id}}</td>
-                    <td>{{automatic_anticipation_enabled}}</td>
-                    <td>{{anticipatable_volume_percentage}}</td>
-                    <td>{{transfer_enabled}}</td>
+                    <td>{{tid}}</td>
+                    <td>{{status}}</td>
+                    <td>{{amount}}</td>
+                    <td>{{refunded_amount}}</td>
+                    <td>{{payment_method}}</td>
                     
                     <td class="center aligned">
-                        <a href="#" id="balance-{{id}}" class="ui mini orange balance button">Saldo</a>
-                        <a href="#" id="operations-{{id}}" class="ui mini orange operations button">Extrato</a>
+                        <a href="#" id="total-{{tid}}" class="ui mini orange total button">Estorno Total</a>
+                        <a href="#" id="parcial-{{tid}}" class="ui mini orange parcial button">Estorno Parcial</a>
                     </td>
                 </tr>
                 {{/each}}
@@ -41,6 +43,13 @@
         </table>
     </div>
 </div>
+
+<div class="ui basic segment">
+    <div class="ui container">
+        <pre><code id="resultado"></code></pre>
+    </div>
+</div>
+
 
 <div class="ui transaction modal">
     <div class="header">Criar uma Nova Transação</div>
@@ -82,75 +91,36 @@
     </div>
 </div>
 
-<div class="ui balance modal">
-    <div class="header">Saldos</div>
-    <div class="content">
-        <table class="ui striped basic table">
-            <tbody>
-                <tr>
-                    <td>Disponível</td>
-                    <td id="balance-modal-available"></td>
-                </tr>
-                <tr>
-                    <td>Aguardando Pagamento</td>
-                    <td id="balance-modal-waiting_funds"></td>
-                </tr>
-                <tr>
-                    <td>Saldo Atual</td>
-                    <td id="balance-modal-transferred"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div class="ui operations modal">
-    <div class="header">Extrato</div>
-    <div class="content">
-        <table class="ui striped table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Status</th>
-                    <th>Valor</th>
-                    <th>Taxa</th>
-                    <th>Data</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-            </tbody>
-        </table>
-    </div>
-</div>
 
 
 <script>
     $(document).ready(function () {
-        $('#nova-assinatura').on('click', function () {
-            $('.ui.transaction.modal').modal('show');
-        });
-        $('.balance.button').on('click', function () {
+
+        $('.total.button').on('click', function () {
             var self = this;
             $(self).addClass('loading')
-            $.get('/recipients/balance/'+$(this).attr('id').replace('balance-', ''), function(data) {
-                console.log(data)
-                $('#balance-modal-available').text(data.available.amount)
-                $('#balance-modal-waiting_funds').text(data.waiting_funds.amount)
-                $('#balance-modal-transferred').text(data.transferred.amount)
-                $('.ui.balance.modal').modal('show');
+            console.log($(self).parent().parent().children()[2])
+            $.post(window.location.href, {
+                amount: 1 * $($(self).parent().parent().children()[2]).text(),
+                id: $(self).attr('id').replace('total-', '') 
+            }, function(data) {
                 $(self).removeClass('loading')
-            }); 
+                console.log(data)
+                $('#resultado').text(JSON.stringify(data));
+            });
         });
-        $('.operations.button').on('click', function () {
+
+        $('.parcial.button').on('click', function () {
             var self = this;
             $(self).addClass('loading')
-            $.get('/recipients/operations/'+$(this).attr('id').replace('operations-', ''), function(data) {
-                console.log(data)
-                
-                $('.ui.operations.modal').modal('show');
+            $.post(window.location.href, {
+                amount: 0.5 * $($(self).parent().parent().children()[2]).text(),
+                id: $(self).attr('id').replace('parcial-', '') 
+            }, function(data) {
                 $(self).removeClass('loading')
-            }); 
+                console.log(data)
+                $('#resultado').text(JSON.stringify(data));
+            });
         });
     })
 </script>
