@@ -5,16 +5,67 @@
     </div>
 </div>
 
+<script src="https://assets.pagar.me/checkout/checkout.js"></script>
+
 <div class="ui text container">
-    <div class="ui basic  segment">
-        <form method="POST" action="">
-            <script type="text/javascript"
-                src="https://assets.pagar.me/checkout/checkout.js"
-                data-button-text="Pagar usando o Checkout"
-                data-encryption-key="ek_test_Ec8KhxISQ1tug1b8bCGxC2nXfxqRmk"
-                data-amount="1000">
-            </script>
-        </form>
+    <div class="ui basic segment">
+        <button id="checkout-token" class="ui large orange button">Pagar com Checkout</button>
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $('#checkout-token').on('click', function () {
+            // INICIAR A INSTÂNCIA DO CHECKOUT
+            // declarando um callback de sucesso
+            var checkout = new PagarMeCheckout.Checkout({
+                "encryption_key": "ek_test_3nWQBVzj9M6k0UIunCdqh0ctv8lXIr",
+                success: function (data) {
+                    console.log(data);
+                    //Tratar aqui as ações de callback do checkout, como exibição de mensagem ou envio de token para captura da transação
+                    $.post(window.location.href, data, function(data) {
+                        console.log(data)
+                    })
+                }
+            });
+
+            // DEFINIR AS OPÇÕES
+            // e abrir o modal
+            // É necessário passar os valores boolean em "var params" como string
+            var params = {
+                "amount": 1000,
+                "buttonText": "Pagar",
+                "buttonClass": "pagarme-botao",
+                "customerData": true,
+                "boletoDiscountPercentage": 45,
+                "boletoHelperText": "Compre com boleto",
+                "creditCardHelperText": "Compre com cartão",
+                "paymentMethods": "boleto,credit_card",
+                "cardBrands": "elo,visa,mastercard",
+                "maxInstallments": 12,
+                "uiColor": "#bababa",
+                "postbackUrl": "requestb.in/1234",
+                "createToken": true,
+                "customerName": "Aardvark",
+                "customerDocumentNumber": "784.801.064-33",
+                "customerEmail": "aardvark.silva@pagar.me",
+                "customerAddressStreet": "Rua Doutor Geraldo Campos de Marais",
+                "customerAddressStreetNumber": 240,
+                "customerAddressComplementary": "Complemento",
+                "customerAddressNeighborhood": "Bairro",
+                "customerAddressCity": "São Paulo",
+                "customerAddressState": "SP",
+                "customerAddressZipcode": "87060-624",
+                "customerPhoneDdd": "11",
+                "customerPhoneNumber": "87654321",
+                "disableZeroDocumentNumber": true,
+                "interestRate": 12,
+                "freeInstallments": 3,
+                "defaultInstallment": 5,
+                "headerText": "Título",
+                "paymentButtonText": "Pagar agora!"
+            };
+            checkout.open(params);
+        });
+    })
+</script>

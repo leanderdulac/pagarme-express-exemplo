@@ -12,4 +12,23 @@ router.get('/', function (req, res, next) {
 });
 
 
+router.post('/', function (req, res, next) {
+    var form_data = req.body;
+
+    // Cria uma conexão com o Pagar.me 
+    pagarme.client.connect({
+            api_key: config.api_key
+        })
+        // Usa a conexão com o Pagar.me para criar uma transação
+        .then(client => client.transactions.capture({
+            "id": form_data.token,
+            "amount": form_data.amount
+        }))
+        // Vamos fazer o render de uma página com o JSON retornado pela API 
+        .then(result => res.send(result))
+        .catch(error => res.send(error));
+
+});
+
+
 module.exports = router;
