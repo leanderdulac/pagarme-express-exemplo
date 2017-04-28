@@ -1,12 +1,10 @@
 <div class="ui vertical segment">
     <div class="ui grid container ">
         <div class="six wide column">
-            <h1 class="ui header">Transações</h1>
+            <h1 class="ui header">Efetuando Estornos</h1>
             <p><a href="/">&larr; Voltar</a></p>
         </div>
         <div class="ten wide column">
-            <a href="javascript:void(0)" id="nova-transacao" class="ui right floated orange large button">Nova Transação</a>
-            <a href="javascript:void(0)" id="nova-transacao-split" class="ui right floated orange large button">Nova Transação com Split</a>
         </div>
     </div>
 </div>
@@ -22,7 +20,7 @@
                     <th>Estornado</th>
                     <th>Método Pgto</th>
                     
-                    <th class="center aligned">Ações</th>
+                    <th class="center aligned">Estorno</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,8 +33,8 @@
                     <td>{{payment_method}}</td>
                     
                     <td class="center aligned">
-                        <a href="#" id="total-{{tid}}" class="ui mini orange total button">Estorno Total</a>
-                        <a href="#" id="parcial-{{tid}}" class="ui mini orange parcial button">Estorno Parcial</a>
+                        <a href="#" id="total-{{tid}}" class="ui mini orange total button">Total</a>
+                        <a href="#" id="parcial-{{tid}}" class="ui mini orange parcial button">Parcial</a>
                     </td>
                 </tr>
                 {{/each}}
@@ -53,14 +51,6 @@
 
 <script>
     $(document).ready(function () {
-
-        $('#nova-transacao').on('click', function () {
-            console.log('transaction')
-        });
-
-        $('#nova-transacao-split').on('click', function () {
-            console.log('transaction-split')
-        });
 
         $('.total.button').on('click', function () {
             var self = this;
@@ -88,5 +78,6 @@
                 $('#resultado').text(JSON.stringify(data));
             });
         });
-    })
+
+    });
 </script>

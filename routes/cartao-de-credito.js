@@ -6,9 +6,19 @@ var router = express.Router();
 
 
 router.get('/', function (req, res, next) {
-    res.render('cartao-de-credito', {
-        title: 'Transações - Cartão de Crédito'
-    });
+    // Cria uma conexão com o Pagar.me 
+    pagarme.client.connect({
+            api_key: config.api_key
+        })
+        // Usa a conexão com o Pagar.me para criar uma transação
+        .then(client => client.transactions.all({
+            status: 'authorized'
+        }))
+        .then(transactions => res.render('cartao-de-credito', {
+            title: 'Transações - Cartão de Crédito',
+            transactions: transactions
+        }))
+    
 });
 
 // Os POSTs nessa URL vão criar uma transação no ambiente de testes
@@ -42,18 +52,29 @@ router.post('/', function (req, res, next) {
             "async": false,
             "installments": form_data.installments,
             "payment_method": "credit_card",
-            "amount": form_data.amount * 1
+            "amount": form_data.amount 
         }))
         // Vamos fazer o render de uma página com o JSON retornado pela API 
         .then(transactions => res.send(transactions))
-        // Se houve algum erro, vamos enviar o resultado do erro
-        .catch(error => res.render('resultado', {
-            back_url: '/transacoes/cartao-de-credito',
-            json_result: JSONFormatter(error, {
-                type: 'space',
-                size: 2
-            })
+        .catch(error => res.send(error));
+});
+
+// Os POSTs nessa URL vão criar uma transação no ambiente de testes
+router.post('/captura', function (req, res, next) {
+    var form_data = req.body;
+
+    // Cria uma conexão com o Pagar.me 
+    pagarme.client.connect({
+            api_key: config.api_key
+        })
+        // Usa a conexão com o Pagar.me para criar uma transação
+        .then(client => client.transactions.capture({
+            "id": form_data.id,
+            "amount": form_data.amount
         }))
+        // Vamos fazer o render de uma página com o JSON retornado pela API 
+        .then(result => res.send(result))
+        .catch(error => res.send(error));
 });
 
 module.exports = router;

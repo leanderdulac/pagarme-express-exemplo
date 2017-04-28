@@ -7,7 +7,7 @@
 
 <div class="ui text container">
     <div class="ui basic inverted segment">
-        <div class="ui big inverted form">
+        <div class="ui inverted form">
             <div class="two fields">
                 <div class="field">
                     <label>CVV</label>
@@ -18,32 +18,65 @@
                     <input id="installments" value="1" placeholder="Número de Parcelas" type="number">
                 </div>
             </div>
+            <div class="field">
+                <label>Valor da Transação</label>
+                <input id="amount" value="1888" placeholder="Valor da Transação" type="number">
+            </div>
             <div class="two fields">
                 <div class="field">
-                    <label>Valor da Transação</label>
-                    <input id="amount" value="888" placeholder="Valor da Transação" type="number">
-                </div>
-                <div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" tabindex="0" class="hidden" id="capture">
+                        <input type="checkbox" checked="checked" tabindex="0" class="hidden" id="capture">
                         <label style="color:#ffffff!important">Capturar a transação?</label>
                     </div>
                 </div>
+                <div class="field">
+                    <button id="criar-transacao" class="ui orange large fluid button">Criar Transação</button>
+                </div>
             </div>
-            <button id="criar-transacao" class="ui orange huge fluid button">Criar Transação</button>
         </div>
     </div>
 </div>
 
 
+<div class="ui basic segment">
+    <div class="ui container">
+        <table class="ui striped table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Valor</th>
+                    <th>Pago</th>
+                    <th>Estornado</th>
+                    <th>Forma Pgto</th>
+                    <th class="center aligned">Captura</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each transactions}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{status}}</td>
+                    <td>{{amount}}</td>
+                    <td>{{paid_amount}}</td>
+                    <td>{{refunded_amount}}</td>
+                    <td>{{payment_method}}</td>
+                    <td class="center aligned">
+                        <a href="javascript:void(0)" id="total-{{id}}" class="ui mini orange total button">Total</a>
+                        <a href="javascript:void(0)" id="parcial-{{id}}" class="ui mini orange parcial button">Parcial</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <div class="ui basic segment">
     <div class="ui container">
         <pre><code id="resultado"></code></pre>
     </div>
 </div>
-
-                         
 
 <script>
     $(document).ready(function () {
@@ -57,7 +90,33 @@
             }
         });
 
-        $('#criar-transacao').on('click', function() {
+        $('.total').on('click', function() {
+            var self = this;
+            $(self).addClass('loading')
+            $.post('/cartao-de-credito/captura', {
+                amount: 1 * $($(self).parent().parent().children()[2]).text(),
+                id: $(self).attr('id').replace('total-', '') 
+            }, function(data) {
+                $(self).removeClass('loading')
+                console.log(data)
+                $('#resultado').text(JSON.stringify(data));
+            });
+        })
+
+        $('.parcial').on('click', function() {
+            var self = this;
+            $(self).addClass('loading')
+            $.post('/cartao-de-credito/captura', {
+                amount: 0.5 * $($(self).parent().parent().children()[2]).text(),
+                id: $(self).attr('id').replace('parcial-', '') 
+            }, function(data) {
+                $(self).removeClass('loading')
+                console.log(data)
+                $('#resultado').text(JSON.stringify(data));
+            });
+        })
+
+        $('#criar-transacao').on('click', function () {
             $('.form').addClass('loading');
             // Primeiro vamos armazenar o cartão
             var transaction = {
@@ -67,7 +126,7 @@
                 'amount': $('#amount').val(),
                 'installments': $('#installments').val()
             };
-            $.post(window.location.href, transaction, function(data) {
+            $.post(window.location.href, transaction, function (data) {
                 $('.form').removeClass('loading');
                 console.log(data)
                 $('#resultado').text(JSON.stringify(data));

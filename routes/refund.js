@@ -11,7 +11,9 @@ router.get('/', function (req, res, next) {
             api_key: config.api_key
         })
         // Usa a conexão com o Pagar.me para criar uma transação
-        .then(client => client.transactions.all())
+        .then(client => client.transactions.all({
+            status: 'paid'
+        }))
         // Vamos fazer o render de uma página com o JSON retornado pela API 
         .then(local_transactions => {
             transactions = local_transactions;
@@ -50,14 +52,7 @@ router.post('/', function (req, res, next) {
         }))
         // Vamos fazer o render de uma página com o JSON retornado pela API 
         .then(refund => res.send(refund))
-        // Se houve algum erro, vamos enviar o resultado do erro
-        .catch(error => res.render('resultado', {
-            back_url: '/refund/',
-            json_result: JSONFormatter(error, {
-                type: 'space',
-                size: 2
-            })
-        }));
+        .catch(error => res.send(error));
 });
 
 

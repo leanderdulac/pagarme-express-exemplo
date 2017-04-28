@@ -17,6 +17,7 @@ router.post('/', function (req, res, next) {
             card_hash: card_hash
         }))
         .then((card) => res.send(card))
+        .catch(error => res.send(error));
 });
 
 module.exports = router;

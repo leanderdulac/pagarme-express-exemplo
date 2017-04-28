@@ -5,7 +5,8 @@
             <p><a href="/">&larr; Voltar</a></p>
         </div>
         <div class="ten wide column">
-            <a href="javascript:void(0)" id="nova-assinatura" class="ui right floated orange large button">Nova Transação</a>
+            <a href="javascript:void(0)" id="nova-transacao-cartao" class="ui right floated orange large button">Nova Transação (Cartão)</a>
+            <a href="javascript:void(0)" id="nova-transacao-boleto" class="ui right floated orange large button">Nova Transação (Boleto)</a>
         </div>
     </div>
 </div>
@@ -48,15 +49,15 @@
         <div action="" method="POST" class="ui large form">
             <div class="field">
                 <label>CVV</label>
-                <input name="card_cvv" value="111" placeholder="CVV" type="number">
+                <input id="card_cvv" value="111" placeholder="CVV" type="number">
             </div>
             <div class="field">
                 <label>Valor da Transação</label>
-                <input name="amount" value="100000" placeholder="Valor da Transação" type="number">
+                <input id="amount" value="100000" placeholder="Valor da Transação" type="number">
             </div>
             <div class="field">
                 <label>Número de Parcelas</label>
-                <input name="installments" value="1" placeholder="Número de Parcelas" type="number">
+                <input id="installments" value="1" placeholder="Número de Parcelas" type="number">
             </div>
             <div class="ui divider"></div>
             <div class="field">
@@ -95,11 +96,11 @@
         <table class="ui striped table">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Status</th>
-                    <th>Valor</th>
-                    <th>Taxa</th>
                     <th>Data</th>
+                    <th>Saldo</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Tipo</th>
                 </tr>
             </thead>
             <tbody>
@@ -109,11 +110,25 @@
     </div>
 </div>
 
+<div class="ui basic segment">
+    <div class="ui container">
+        <pre><code id="resultado"></code></pre>
+    </div>
+</div>
+
+
 
 <script>
     $(document).ready(function () {
-        $('#nova-assinatura').on('click', function () {
+        $('#nova-transacao-cartao').on('click', function () {
             $('.ui.transaction.modal').modal('show');
+        });
+        $('#nova-transacao-boleto').on('click', function () {
+            $('#nova-transacao-boleto').addClass('loading');
+            $.post('boleto', {}, function(data) {
+                console.log(data)
+                $('#nova-transacao-boleto').removeClass('loading');
+            })
         });
         $('.balance.button').on('click', function () {
             var self = this;
@@ -132,7 +147,18 @@
             $(self).addClass('loading')
             $.get('/recipients/operations/'+$(this).attr('id').replace('operations-', ''), function(data) {
                 console.log(data)
-                
+                $('.ui.operations tbody').html('')
+                for(var i = 0; i < data.length; i++) {
+                    $('.ui.operations tbody').append(
+                        '<tr>' + 
+                            '<td>' + data[i].date_created + '</td>' + 
+                            '<td>' + data[i].balance_amount + '</td>' + 
+                            '<td>' + data[i].amount + '</td>' + 
+                            '<td>' + data[i].status + '</td>' + 
+                            '<td>' + data[i].type + '</td>' + 
+                        '</tr>'
+                    );
+                }
                 $('.ui.operations.modal').modal('show');
                 $(self).removeClass('loading')
             }); 
@@ -151,6 +177,7 @@
             $.post(window.location.href, transaction, function(data) {
                 $('.form').removeClass('loading');
                 console.log(data)
+                $('#resultado').text(JSON.stringify(data));
             });
         });
     })

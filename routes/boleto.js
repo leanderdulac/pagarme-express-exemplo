@@ -44,7 +44,7 @@ router.post('/', function (req, res, next) {
         }))
         // Vamos fazer o render de uma página com o JSON retornado pela API 
         .then(transactions => res.render('resultado', {
-            back_url: '/transacoes/boleto',
+            back_url: '/boleto',
             json_result: JSONFormatter(transactions, {
                 type: 'space',
                 size: 2
@@ -52,14 +52,13 @@ router.post('/', function (req, res, next) {
         }))
         // Se houve algum erro, vamos enviar o resultado do erro
         .catch(error => res.render('resultado', {
-            back_url: '/transacoes/boleto',
+            back_url: '/boleto',
             json_result: JSONFormatter(error, {
                 type: 'space',
                 size: 2
             })
         }))
 });
-
 
 // Os POSTs nessa URL vão pagar um boleto no ambiente de testes
 router.post('/pagar', function (req, res, next) {
@@ -76,7 +75,7 @@ router.post('/pagar', function (req, res, next) {
         }))
         // Vamos fazer o render de uma página com o JSON retornado pela API 
         .then(transactions => res.render('resultado', {
-            back_url: '/transacoes/boleto',
+            back_url: '/boleto',
             json_result: JSONFormatter(transactions, {
                 type: 'space',
                 size: 2
@@ -84,7 +83,7 @@ router.post('/pagar', function (req, res, next) {
         }))
         // Se houve algum erro, vamos enviar o resultado do erro
         .catch(error => res.render('resultado', {
-            back_url: '/transacoes/boleto',
+            back_url: '/boleto',
             json_result: JSONFormatter(error, {
                 type: 'space',
                 size: 2
