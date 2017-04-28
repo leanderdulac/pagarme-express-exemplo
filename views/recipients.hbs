@@ -45,26 +45,11 @@
 <div class="ui transaction modal">
     <div class="header">Criar uma Nova Transação</div>
     <div class="content">
-        <form action="" method="POST" class="ui large form">
+        <div action="" method="POST" class="ui large form">
             <div class="field">
-                <label>Nome no Cartão</label>
-                <input name="card_holder_name" value="Aardvark da Silva" placeholder="Nome do Cartão" type="text">
+                <label>CVV</label>
+                <input name="card_cvv" value="111" placeholder="CVV" type="number">
             </div>
-            <div class="field">
-                <label>Número do Cartão</label>
-                <input name="card_number" value="4556366941062122" placeholder="Número do Cartão" type="number">
-            </div>
-            <div class="two fields">
-                <div class="field">
-                    <label>Data Vencimento</label>
-                    <input name="card_expiration_date" value="1220" placeholder="Data Vencimento" type="number">
-                </div>
-                <div class="field">
-                    <label>CVV</label>
-                    <input name="card_cvv" value="111" placeholder="CVV" type="number">
-                </div>
-            </div>
-            <div class="ui divider"></div>
             <div class="field">
                 <label>Valor da Transação</label>
                 <input name="amount" value="100000" placeholder="Valor da Transação" type="number">
@@ -77,8 +62,8 @@
             <div class="field">
                 Essa Transação vai ser dividida entre dois Recebedores, um vai receber 30% e outro 70% do valor da Transação.
             </div>
-            <button submit class="ui submit orange huge fluid button">Criar Transação</button>
-        </form>
+            <button id="criar-transacao" class="ui orange huge fluid button">Criar Transação</button>
+        </div>
     </div>
 </div>
 
@@ -152,5 +137,22 @@
                 $(self).removeClass('loading')
             }); 
         });
+
+        $('#criar-transacao').on('click', function() {
+            $('.form').addClass('loading');
+            // Primeiro vamos armazenar o cartão
+            var transaction = {
+                'card_id': localStorage.getItem('card_id'),
+                'card_cvv': $('#card_cvv').val(),
+                'capture': $('#capture').val(),
+                'amount': $('#amount').val(),
+                'installments': $('#installments').val()
+            };
+            $.post(window.location.href, transaction, function(data) {
+                $('.form').removeClass('loading');
+                console.log(data)
+            });
+        });
     })
 </script>
+

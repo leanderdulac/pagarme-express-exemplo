@@ -32,6 +32,12 @@
 </div>
 
 
+<div class="ui basic segment">
+    <div class="ui container">
+        <pre><code id="resultado"></code></pre>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
 
@@ -69,6 +75,7 @@
                     }, function (card) {
                         localStorage.setItem('card_id', card.id);
                         console.log(card)
+                         $('#resultado').text(JSON.stringify(card));
                         $('.form').removeClass('loading');
                     })
                 });

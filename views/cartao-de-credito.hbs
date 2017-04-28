@@ -36,6 +36,15 @@
 </div>
 
 
+
+<div class="ui basic segment">
+    <div class="ui container">
+        <pre><code id="resultado"></code></pre>
+    </div>
+</div>
+
+                         
+
 <script>
     $(document).ready(function () {
         $('.ui.checkbox').checkbox({
@@ -61,8 +70,8 @@
             $.post(window.location.href, transaction, function(data) {
                 $('.form').removeClass('loading');
                 console.log(data)
-            })
-
-        })
+                $('#resultado').text(JSON.stringify(data));
+            });
+        });
     })
 </script>

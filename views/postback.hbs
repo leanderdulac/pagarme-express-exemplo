@@ -29,6 +29,13 @@
     </div>
 </div>
 
+
+<div class="ui basic segment">
+    <div class="ui container">
+        <pre><code id="resultado"></code></pre>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
 
@@ -46,6 +53,7 @@
             $.post(window.location.href, transaction, function(data) {
                 console.log(data)
                 $('.form').removeClass('loading');
+                $('#resultado').text(JSON.stringify(data));
             })
 
         })
